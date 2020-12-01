@@ -6,7 +6,7 @@ import sys
 operators = ['+', '-', '*', '/']
 big_nums = ['25', '50', '75', '100']
 little_nums = [str(i) for i in range(1, 11)] * 2
-little_nums.sort(key=lambda x: int(x))
+rng.shuffle(little_nums)
 
 # Randomly select numbers from pools
 chosen_little = rng.sample(little_nums, 4)
@@ -23,18 +23,21 @@ attempts = 0
 solved = False
 start_time = time.time()
 
-##Comment out the following to select random numbers##
-chosen_nums = ['50', '75', '1', '4', '3', '6']
-target = 472
+# -- Comment out the following to select random numbers -- #
+
+# chosen_nums = ['50', '75', '1', '4', '3', '6']
+# target = 472
+
+# -------------------------------------------------------- #
 
 print(f'Chosen numbers: {" ".join(chosen_nums)}')
 print(f'Target: {target}')
 print('Press CTRL + C to quit and give closeset solution\n')
 
+# TODO Separate code into functions to ease implementation of bracket support
+
 try:
     while not solved:
-        # TODO: Find way to add brackets to equations
-        # TODO: Ensure only whole positive numbers are used in equation
         # TODO: Find smarter way of building equations
         temp_nums = chosen_nums.copy()
         rng.shuffle(temp_nums)
@@ -63,8 +66,8 @@ try:
                     
             if len(equation) < len(''.join(chosen_nums)) + len(''.join(chosen_nums)) - 1:
                 equation += rng.choice(operators)
-            if attempts == 100000:
-                sys.exit()
+            if attempts == 50000:
+                raise KeyboardInterrupt
                 
 
 except KeyboardInterrupt:
@@ -76,8 +79,9 @@ except KeyboardInterrupt:
     print(f'Nearest solution: {int(nearest_solution)}')
     print(f'Difference: {int(nearest_solution_diff)}')
 
-if solved:
-    run_time = time.time() - start_time
-    print(f'Equation: {joined_equation}')
-    print(f'Solution: {int(solution)}')
-    print(f'Completed in {attempts} attempts and {run_time:.5} seconds')
+    if solved:
+        run_time = time.time() - start_time
+        print(f'Equation: {joined_equation}')
+        print(f'Solution: {int(solution)}')
+        print(f'Completed in {attempts} attempts and {run_time:.5} seconds')
+
